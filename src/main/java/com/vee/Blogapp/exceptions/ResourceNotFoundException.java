@@ -6,24 +6,26 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class ResourceNotFoundException extends  RuntimeException {
+public class ResourceNotFoundException extends RuntimeException {
 
     String message;
-    String exception;
-    Object type;
 
-    public ResourceNotFoundException(String message, String exception, Object type) {
+    public ResourceNotFoundException(String message) {
+        super(message);
         this.message = message;
-        this.exception = exception;
-        this.type = type;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
 
     @Override
     public String toString() {
-        return "ResourceNotFoundException{" +
-                "message='" + message + '\'' +
-                ", exception='" + exception + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+        return "ResourceNotFoundException{" + "message='" + message + '\'' + '}';
     }
 }

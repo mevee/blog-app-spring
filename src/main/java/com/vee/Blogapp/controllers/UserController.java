@@ -1,59 +1,69 @@
 package com.vee.Blogapp.controllers;
 
 import com.vee.Blogapp.payloads.ResponsePayload;
+import com.vee.Blogapp.payloads.ResponsePayloadData;
 import com.vee.Blogapp.payloads.UserDto;
-import com.vee.Blogapp.payloads.request.CreateUserRequest;
 import com.vee.Blogapp.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @PostMapping(name = "/")
-    public ResponseEntity<ResponsePayload> createUser(@Valid @RequestBody UserDto request) {
-        System.out.println("---------Request" + request + "--------");
-//        if (request.getName().isEmpty()) return "Name is required";
-//        if (request.getEmail().isEmpty()) return "Email is required";
-//        if (request.getPassword().isEmpty()) return "Password is required";
-//        if (request.getPassword().length()<6) return "Password must be minimum of 6 required";
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<?> ping() {
+        logger.info("Ping received");
+        var payload = ResponsePayload.success();
+        return ResponseEntity.ok(payload);
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto request) {
+        logger.info("Create user request: {}", request);
         UserDto userDto = userService.createUser(request);
-        var responsePayload = ResponsePayload.success();
-         responsePayload.setData(userDto);
-        return new ResponseEntity<>(responsePayload,HttpStatus.CREATED);
+        return ResponseEntity.ok(new ResponsePayloadData<>("Success",201,userDto));
     }
 
+    @PutMapping("/")
+    public ResponseEntity<ResponsePayload> updateUser(@Valid @RequestBody UserDto request) {
+        logger.info("Update user request: ID = {}, body = {}", request);
+        UserDto userDto = userService.updateUser(request);
+        return ResponseEntity.ok(new ResponsePayloadData<>("Success",200,userDto));
 
-
-    @GetMapping(name = "/{userId}")
-    public ResponseEntity<ResponsePayload> createUser(@PathVariable Long userId) {
-        System.out.println("---------Request" + userId + "--------");
-//        if (request.getName().isEmpty()) return "Name is required";
-//        if (request.getEmail().isEmpty()) return "Email is required";
-//        if (request.getPassword().isEmpty()) return "Password is required";
-//        if (request.getPassword().length()<6) return "Password must be minimum of 6 required";
-        List<UserDto> userDto = userService.getAllUsers();
-        var responsePayload = ResponsePayload.success();
-        responsePayload.setData(userDto);
-        return new ResponseEntity<>(responsePayload,HttpStatus.OK);
     }
-    @GetMapping(name = "/{userId}")
+
+    @GetMapping("/all")
+    public ResponseEntity<ResponsePayload> getAllUsers() {
+        logger.info("Fetch all users");
+        List<UserDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(new ResponsePayloadData<>("Success", 200, users));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponsePayload> getUserById(@PathVariable Long userId) {
+        logger.info("Fetch user by ID: {}", userId);
+        var user = userService.findUserById(userId);
+        return ResponseEntity.ok(new ResponsePayloadData<>("Success", 200, user));
+    }
+
+    @DeleteMapping("/{userId}")
     public ResponseEntity<ResponsePayload> deleteUser(@PathVariable Long userId) {
-        System.out.println("---------Request" + userId + "--------");
-         userService.deleteUser(userId);
-        var responsePayload = ResponsePayload.success();
-        return new ResponseEntity<>(responsePayload,HttpStatus.OK);
+        logger.info("Delete user by ID: {}", userId);
+        userService.deleteUser(userId);
+        return ResponseEntity.ok(ResponsePayload.success());
     }
 }

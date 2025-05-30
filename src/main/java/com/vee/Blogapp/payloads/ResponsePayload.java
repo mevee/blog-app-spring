@@ -1,33 +1,44 @@
 package com.vee.Blogapp.payloads;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
+import lombok.Getter;
+
 @Getter
-@Setter
-public class ResponsePayload<T> {
+public class ResponsePayload{
     private String message;
     private int code;
-    private T data;
+
+
+    public ResponsePayload() {
+     }
 
     public ResponsePayload(String message, int code) {
         this.message = message;
         this.code = code;
-    }
 
-    public ResponsePayload(String message, int code, T data) {
-        this.message = message;
-        this.code = code;
-        this.data = data;
     }
 
     static public ResponsePayload success() {
-        return new ResponsePayload<>("Success", 200);
+        return new ResponsePayload("Success", 200);
     }
 
-    static public ResponsePayload error(String message,int code) {
-        return new ResponsePayload<>(message, code);
+    static public ResponsePayload error(String message, int code) {
+        return new ResponsePayload(message, code);
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getCode() {
+        return code;
     }
 }
