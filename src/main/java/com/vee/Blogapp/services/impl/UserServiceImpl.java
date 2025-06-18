@@ -66,7 +66,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto dto) {
-        return null;
+        User user = userRepo.findById(dto.getId()).orElseThrow(()->new ResourceNotFoundException("User with id "+dto.getId()+" not found"));
+        user.setName(dto.getName());
+        user.setMobile(dto.getMobile());
+        user.setPassword(dto.getPassword());
+        user.setName(dto.getName());
+        userRepo.save(user);
+
+        return userToDto(userRepo.save(user));
     }
 
     private UserDto userToDto(User user) {

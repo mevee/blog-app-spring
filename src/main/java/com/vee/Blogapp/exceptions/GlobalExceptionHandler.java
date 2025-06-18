@@ -2,6 +2,7 @@ package com.vee.Blogapp.exceptions;
 
 import com.vee.Blogapp.payloads.ResponsePayload;
 import jakarta.validation.constraints.Null;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -24,13 +25,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponsePayload> userNotFoundException(MethodArgumentNotValidException exception) {
-//
-//        var errors = new HashMap<String, String>();
-//        exception.getBindingResult().getAllErrors().forEach((error) -> {
-//            var message = ((FieldError) error).getField();
-//            var errorMessage = ((FieldError) error).getDefaultMessage();
-//            errors.put(message, errorMessage);
-//        });
         String message = "";
         if(!exception.getBindingResult().getAllErrors().isEmpty()){
             var error = (FieldError) (exception.getBindingResult().getAllErrors().get(0));
@@ -39,6 +33,21 @@ public class GlobalExceptionHandler {
             message ="Error: "+errorMessage;
         }
 
+        var payload = ResponsePayload.error(message, HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ResponsePayload> propertyReferenceException(PropertyReferenceException exception) {
+        String message = "";
+        message =exception.getMessage();
+        var payload = ResponsePayload.error(message, HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponsePayload> propertyReferenceException(IllegalArgumentException exception) {
+        String message = "";
+        message = exception.getMessage();
         var payload = ResponsePayload.error(message, HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
     }
