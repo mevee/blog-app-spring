@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +36,9 @@ public class User {
     private Boolean isEmailVerified;
     private Boolean isMobileVerified;
     private Boolean authToken;
+
+    @OneToMany
+    private List<Post> posts = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -145,5 +150,13 @@ public class User {
 
     public void setAuthToken(Boolean authToken) {
         this.authToken = authToken;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

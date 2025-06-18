@@ -21,6 +21,9 @@ public class ResponsePayload{
     static public ResponsePayload success() {
         return new ResponsePayload("Success", 200);
     }
+    static public ResponsePayload success(String message) {
+        return new ResponsePayload(message, 200);
+    }
 
     static public ResponsePayload error(String message, int code) {
         return new ResponsePayload(message, code);
