@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PostDto {
     @NotNull
@@ -17,13 +19,14 @@ public class PostDto {
     private LocalDateTime updatedAt;
     private CategoryDto category;
     private UserDto user;
+    private Set<CommentDto> comment = new HashSet<>();
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
     public String getTitle() {
         return title;
     }
@@ -70,5 +73,13 @@ public class PostDto {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Set<CommentDto> getComment() {
+        return comment;
+    }
+
+    public void setComment(Set<CommentDto> comment) {
+        this.comment = comment;
     }
 }
