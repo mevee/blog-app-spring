@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -25,6 +27,9 @@ public class Post {
 
     @ManyToOne
     private PostCategory category;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private Set<Comment> comment = new HashSet<>();
 
     @ManyToOne
     private User user;
@@ -93,4 +98,11 @@ public class Post {
         this.user = user;
     }
 
+    public Set<Comment> getComment() {
+        return comment;
+    }
+
+    public void setComment(Set<Comment> comment) {
+        this.comment = comment;
+    }
 }

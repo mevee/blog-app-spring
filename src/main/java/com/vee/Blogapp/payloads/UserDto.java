@@ -1,5 +1,6 @@
 package com.vee.Blogapp.payloads;
 
+import com.vee.Blogapp.entites.Role;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -28,6 +32,7 @@ public class UserDto {
     private Boolean isEmailVerified;
     private Boolean isMobileVerified;
     private Boolean authToken;
+    private Set<Role> roles = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -123,5 +128,13 @@ public class UserDto {
 
     public void setAuthToken(Boolean authToken) {
         this.authToken = authToken;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

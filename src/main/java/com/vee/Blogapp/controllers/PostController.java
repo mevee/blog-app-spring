@@ -91,12 +91,12 @@ public class PostController {
         return ResponseEntity.ok(new ResponsePayloadData<>("Success", 200, post));
     }
 
-//    @DeleteMapping("/posts/{postId}")
-//    public ResponseEntity<ResponsePayload> deletePost(@PathVariable Integer postId) {
-//        logger.info("Delete pos by ID: {}", postId);
-////        postService.deletePost(postId);
-//        return ResponseEntity.ok(ResponsePayload.success("Post deleted success."));
-//    }
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ResponsePayload> deletePost(@PathVariable Integer postId) {
+        logger.info("Delete pos by ID: {}", postId);
+        postService.deletePost(postId);
+        return ResponseEntity.ok(ResponsePayload.success("Post deleted success."));
+    }
 
     @PostMapping("/posts/{postId}/image")
     public ResponseEntity<?> uploadPostImage(@RequestParam("image") MultipartFile image, @PathVariable Integer postId) throws IOException {
